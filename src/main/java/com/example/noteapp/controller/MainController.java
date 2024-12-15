@@ -5,28 +5,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.noteapp.service.NoteService;
+import com.example.noteapp.service.Interface_NoteService;
 
 @Controller
-public class HelloController {
+public class MainController {
 
-    private NoteService noteService;
+    private Interface_NoteService noteService;
 
     @Autowired
-    public HelloController(NoteService noteService){
+    public MainController(Interface_NoteService noteService){
         this.noteService = noteService;
     }
 
     @GetMapping("/")
     public String main(Model model){
         model.addAttribute("notes", noteService.getAllNotes());
-        return "list";
+        return "redirect:/boards";
     }
 
-    @GetMapping("/login")
-    public String login(){
-        return "login";
-    }
+
 
     @GetMapping("/403")
     public String error403(){

@@ -1,6 +1,6 @@
 package com.example.noteapp.config;
 
-import com.example.noteapp.service.UserService;
+import com.example.noteapp.service.Interface_MyUserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +22,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final Interface_MyUserDetailsService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public SecurityConfig(UserService userService, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(Interface_MyUserDetailsService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }

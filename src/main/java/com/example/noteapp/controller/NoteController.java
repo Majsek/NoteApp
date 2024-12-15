@@ -5,15 +5,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.noteapp.service.NoteServiceImpl;
+import com.example.noteapp.service.NoteService;
 
 @Controller
 @RequestMapping("/notes")
 public class NoteController {
 
-    private final NoteServiceImpl noteService;
+    private final NoteService noteService;
 
-    public NoteController(NoteServiceImpl noteService) {
+    public NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
 
