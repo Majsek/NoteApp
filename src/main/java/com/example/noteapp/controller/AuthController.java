@@ -35,6 +35,10 @@ public class AuthController {
             return "redirect:/login?error=Passwords do not match";
         }
 
+        if (userService.existsByUsername(username)) {
+            return "redirect:/register?error=Username already exists";
+        }
+
         // Vytvoření uživatele
         User user = new User();
         user.setUsername(username);
@@ -44,5 +48,13 @@ public class AuthController {
         userService.save(user);
 
         return "redirect:/login?success=Registered successfully";
+    }
+
+    @GetMapping("/register")
+    public String showRegisterPage(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        return "custom-register";
     }
 }
