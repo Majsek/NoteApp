@@ -1,20 +1,59 @@
 package com.example.noteapp.service;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.noteapp.model.Note;
+import com.example.noteapp.repository.NoteRepository;
 
-public interface NoteService {
+@Service
+public class NoteService implements Interface_NoteService {
 
-    List<Note> getAllNotes();
-    
-    Note getNoteById(Long id);
+    private final NoteRepository noteRepository;
 
-    boolean addNote(Note note);
+    @Autowired
+    public NoteService(NoteRepository noteRepository) {
+        this.noteRepository = noteRepository;
+    }
 
-    boolean updateNote(Note note);
+    @Override
+    public List<Note> getAllNotes() {
+        return noteRepository.findAll();
+    }
 
-    Note deleteNoteById(Long id);
+    @Override
+    public Note getNoteById(Long id) {
+        return noteRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public boolean addNote(Note note) {
+        noteRepository.save(note);
+        return true;
+    }
+
+    @Override
+    public boolean updateNote(Note note) {
+        Optional<Note> noteDB = noteRepository.findById(note.getId());
+        if (noteDB.isPresent()) {
+            noteRepository.save(note);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Note deleteNoteById(Long id) {
+        Optional<Note> noteDB = noteRepository.findById(id);
+        if (noteDB.isPresent()) {
+            Note note = noteDB.get();
+            noteRepository.delete(note);
+            return note;
+        }
+        return null;
+    }
 }
-
 

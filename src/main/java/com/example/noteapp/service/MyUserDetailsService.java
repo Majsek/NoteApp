@@ -6,18 +6,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.noteapp.config.MyUserDetails;
 import com.example.noteapp.model.User;
 import com.example.noteapp.repository.UserRepository;
-import com.example.noteapp.security.MyUserDetails;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class MyUserDetailsService implements Interface_MyUserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // Přidání PasswordEncoderu
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public MyUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,4 +41,10 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
 }

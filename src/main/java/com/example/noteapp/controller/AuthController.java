@@ -2,20 +2,27 @@ package com.example.noteapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.noteapp.model.User;
-import com.example.noteapp.service.UserService;
+import com.example.noteapp.service.Interface_MyUserDetailsService;
 
 @Controller
 public class AuthController {
 
-    private final UserService userService;
+    private final Interface_MyUserDetailsService userService;
 
     @Autowired
-    public AuthController(UserService userService) {
+    public AuthController(Interface_MyUserDetailsService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
     }
 
     @PostMapping("/register")
@@ -28,6 +35,10 @@ public class AuthController {
             return "redirect:/login?error=Passwords do not match";
         }
 
+        if (userService.existsByUsername(username)) {
+            return "redirect:/register?error=Username already exists";
+        }
+
         // Vytvoření uživatele
         User user = new User();
         user.setUsername(username);
@@ -37,5 +48,13 @@ public class AuthController {
         userService.save(user);
 
         return "redirect:/login?success=Registered successfully";
+    }
+
+    @GetMapping("/register")
+    public String showRegisterPage(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", error);
+        }
+        return "custom-register";
     }
 }

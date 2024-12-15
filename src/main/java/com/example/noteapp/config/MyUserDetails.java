@@ -1,4 +1,4 @@
-package com.example.noteapp.security;
+package com.example.noteapp.config;
 
 import java.util.Collection;
 import java.util.Collections;
