@@ -1,6 +1,8 @@
 package com.example.noteapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +23,13 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            return "redirect:/boards";
+        }
+
         return "login";
     }
 
@@ -39,12 +47,10 @@ public class AuthController {
             return "redirect:/register?error=Username already exists";
         }
 
-        // Vytvoření uživatele
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password); // Heslo bude zašifrováno v UserServiceImpl
+        user.setPassword(password);
 
-        // Logika registrace uživatele
         userService.save(user);
 
         return "redirect:/login?success=Registered successfully";
@@ -55,6 +61,13 @@ public class AuthController {
         if (error != null) {
             model.addAttribute("error", error);
         }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {
+            return "redirect:/boards";
+        }
+
         return "custom-register";
     }
 }

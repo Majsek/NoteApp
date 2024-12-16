@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -44,8 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .formLogin((form) -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
@@ -54,8 +52,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
+                        .permitAll())
                 .exceptionHandling((exceptions) -> exceptions
                         .accessDeniedHandler(accessDeniedHandler()));
 
