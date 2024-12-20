@@ -7,15 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.noteapp.model.Note;
-import com.example.noteapp.repository.NoteRepository;
+import com.example.noteapp.repository.Interface_NoteRepository;
 
 @Service
 public class NoteService implements Interface_NoteService {
 
-    private final NoteRepository noteRepository;
+    private final Interface_NoteRepository noteRepository;
 
     @Autowired
-    public NoteService(NoteRepository noteRepository) {
+    public NoteService(Interface_NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
     }
 
