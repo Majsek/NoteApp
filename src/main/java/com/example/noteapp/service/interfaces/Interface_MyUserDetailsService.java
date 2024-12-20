@@ -1,4 +1,4 @@
-package com.example.noteapp.service;
+package com.example.noteapp.service.interfaces;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

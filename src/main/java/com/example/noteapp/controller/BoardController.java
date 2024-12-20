@@ -5,19 +5,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.noteapp.model.Board;
 import com.example.noteapp.service.BoardService;
+import com.example.noteapp.service.NoteService;
 
 @Controller
 public class BoardController {
 
     private final BoardService boardService;
+    private final NoteService noteService;
 
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, NoteService noteService) {
         this.boardService = boardService;
+        this.noteService = noteService;
     }
 
     @GetMapping("/boards")
@@ -41,5 +46,14 @@ public class BoardController {
             model.addAttribute("error", e.getMessage());
             return "new-board";
         }
+    }
+
+    @GetMapping("/boards/{id}")
+    public String getBoardDetails(@PathVariable Long id, Model model) {
+        Board board = boardService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + id));
+        model.addAttribute("board", board);
+        model.addAttribute("notes", noteService.findByBoardId(id)); // Přidání poznámek
+        return "board-details";
     }
 }

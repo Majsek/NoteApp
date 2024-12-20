@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.noteapp.model.User;
-import com.example.noteapp.service.Interface_MyUserDetailsService;
+import com.example.noteapp.service.interfaces.Interface_MyUserDetailsService;
 
 @Controller
 public class AuthController {

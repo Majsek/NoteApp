@@ -3,12 +3,14 @@ package com.example.noteapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.noteapp.model.Note;
 import com.example.noteapp.service.NoteService;
 
 @Controller
-@RequestMapping("/notes")
 public class NoteController {
 
     private final NoteService noteService;
@@ -19,9 +21,22 @@ public class NoteController {
 
     @GetMapping
     public String listNotes(Model model) {
-        // Přidej poznámky do modelu a zobraz je ve view
         model.addAttribute("notes", noteService.getAllNotes());
         return "notes";
     }
-}
 
+    @GetMapping("/boards/{id}/notes/new")
+    public String createNoteForm(@PathVariable("id") Long boardId, Model model) {
+        model.addAttribute("boardId", boardId);
+        model.addAttribute("note", new Note());
+        return "note-form";
+    }
+
+    @PostMapping("/boards/{id}/notes/save")
+    public String saveNote(@PathVariable("id") Long boardId, @ModelAttribute Note note) {
+        note.setBoardId(boardId);
+        noteService.save(note);
+        return "redirect:/boards/" + boardId;
+    }
+
+}

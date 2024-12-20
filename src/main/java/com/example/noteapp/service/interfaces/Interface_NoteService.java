@@ -1,4 +1,4 @@
-package com.example.noteapp.service;
+package com.example.noteapp.service.interfaces;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ public interface Interface_NoteService {
     
     Note getNoteById(Long id);
 
-    boolean addNote(Note note);
-
     boolean updateNote(Note note);
 
     Note deleteNoteById(Long id);
+
+    Note save(Note note);
 }
 
 
