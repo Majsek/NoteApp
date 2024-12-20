@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.example.noteapp.config.MyUserDetails;
 import com.example.noteapp.model.User;
-import com.example.noteapp.repository.UserRepository;
+import com.example.noteapp.repository.Interface_UserRepository;
 
 @Service
 public class MyUserDetailsService implements Interface_MyUserDetailsService {
 
-    private final UserRepository userRepository;
+    private final Interface_UserRepository userRepository;
     private final PasswordEncoder passwordEncoder; // Přidání PasswordEncoderu
 
     @Autowired
-    public MyUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public MyUserDetailsService(Interface_UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }

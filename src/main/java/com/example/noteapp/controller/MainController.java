@@ -34,11 +34,5 @@ public class MainController {
     public String admin(){
         return "admin";
     }
-
-    @GetMapping("/boards")
-    public String boards() {
-        return "boards";
-    }
-
 }
 
