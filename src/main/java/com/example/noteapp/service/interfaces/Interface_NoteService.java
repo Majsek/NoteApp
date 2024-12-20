@@ -1,4 +1,4 @@
-package com.example.noteapp.service;
+package com.example.noteapp.service.interfaces;
 
 import java.util.List;
 

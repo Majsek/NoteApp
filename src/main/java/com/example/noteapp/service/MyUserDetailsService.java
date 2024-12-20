@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.noteapp.config.MyUserDetails;
 import com.example.noteapp.model.User;
 import com.example.noteapp.repository.Interface_UserRepository;
+import com.example.noteapp.service.interfaces.Interface_MyUserDetailsService;
 
 @Service
 public class MyUserDetailsService implements Interface_MyUserDetailsService {

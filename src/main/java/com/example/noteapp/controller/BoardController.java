@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.noteapp.model.Board;
@@ -41,5 +42,13 @@ public class BoardController {
             model.addAttribute("error", e.getMessage());
             return "new-board";
         }
+    }
+
+    @GetMapping("/boards/{id}")
+    public String getBoardDetails(@PathVariable Long id, Model model) {
+        Board board = boardService.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + id));
+        model.addAttribute("board", board);
+        return "board-details";
     }
 }

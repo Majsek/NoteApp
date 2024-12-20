@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.noteapp.model.Note;
 import com.example.noteapp.repository.Interface_NoteRepository;
+import com.example.noteapp.service.interfaces.Interface_NoteService;
 
 @Service
 public class NoteService implements Interface_NoteService {

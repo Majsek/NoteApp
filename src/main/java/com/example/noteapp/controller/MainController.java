@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.noteapp.service.Interface_NoteService;
+import com.example.noteapp.service.interfaces.Interface_NoteService;
 
 @Controller
 public class MainController {
