@@ -31,12 +31,6 @@ public class NoteService implements Interface_NoteService {
     }
 
     @Override
-    public boolean addNote(Note note) {
-        noteRepository.save(note);
-        return true;
-    }
-
-    @Override
     public boolean updateNote(Note note) {
         Optional<Note> noteDB = noteRepository.findById(note.getId());
         if (noteDB.isPresent()) {
@@ -56,5 +50,14 @@ public class NoteService implements Interface_NoteService {
         }
         return null;
     }
-}
 
+    @Override
+    public Note save(Note note) {
+        System.out.println("Saving note: " + note);
+        return noteRepository.save(note);
+    }
+
+    public Object findByBoardId(Long id) {
+        return noteRepository.findByBoardId(id);
+    }
+}
