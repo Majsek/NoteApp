@@ -32,4 +32,10 @@ public class BoardService implements Interface_BoardService {
         }
         return boardRepository.save(board);
     }
+
+    @Override
+    public Optional<Board> findById(Long id) {
+        return boardRepository.findById(id);
+    }
+
 }
