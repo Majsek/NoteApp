@@ -7,7 +7,7 @@
 <body>
     <div class="container">
         <h1>Create a new Note for Board <span th:text="${boardId}"></span></h1>
-        <form th:action="@{/boards/{id}/notes/save(id=${boardId})}" method="post">
+        <form th:action="@{/boards/{boardId}/notes/save(boardId=${boardId})}" method="post">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" name="title" />
