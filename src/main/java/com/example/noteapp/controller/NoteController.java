@@ -25,15 +25,15 @@ public class NoteController {
         return "notes";
     }
 
-    @GetMapping("/boards/{id}/notes/new")
-    public String createNoteForm(@PathVariable("id") Long boardId, Model model) {
+    @GetMapping("/boards/{boardId}/notes/new")
+    public String createNoteForm(@PathVariable("boardId") Long boardId, Model model) {
         model.addAttribute("boardId", boardId);
         model.addAttribute("note", new Note());
         return "note-form";
     }
 
-    @PostMapping("/boards/{id}/notes/save")
-    public String saveNote(@PathVariable("id") Long boardId, @ModelAttribute Note note) {
+    @PostMapping("/boards/{boardId}/notes/save")
+    public String saveNote(@PathVariable("boardId") Long boardId, @ModelAttribute Note note) {
         note.setBoardId(boardId);
         noteService.save(note);
         return "redirect:/boards/" + boardId;

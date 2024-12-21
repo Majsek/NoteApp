@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.noteapp.model.Board;
 import com.example.noteapp.service.BoardService;
@@ -25,7 +24,7 @@ public class BoardController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/boards")
+    @GetMapping({"/boards", "/boards/"})
     public String getBoards(Model model) {
         model.addAttribute("boards", boardService.getAllBoards());
         return "boards";
@@ -48,12 +47,12 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/boards/{id}")
-    public String getBoardDetails(@PathVariable Long id, Model model) {
-        Board board = boardService.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + id));
+    @GetMapping("/boards/{boardId}")
+    public String getBoardDetails(@PathVariable Long boardId, Model model) {
+        Board board = boardService.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
         model.addAttribute("board", board);
-        model.addAttribute("notes", noteService.findByBoardId(id)); // Přidání poznámek
+        model.addAttribute("notes", noteService.findByBoardId(boardId)); // Přidání poznámek
         return "board-details";
     }
 }
