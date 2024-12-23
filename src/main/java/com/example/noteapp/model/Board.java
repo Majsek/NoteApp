@@ -21,17 +21,29 @@ public class Board {
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private Long ownerId;
+
     // Constructors
 
     public Board() {
     }
 
-    public Board(String name, String description) {
+    public Board(String name, String description, Long ownerId) {
+        this.ownerId = ownerId;
         this.name = name;
         this.description = description;
     }
 
     // Getters and Setters
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
 
     public Long getId() {
         return id;
