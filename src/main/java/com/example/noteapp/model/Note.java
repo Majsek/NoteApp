@@ -20,6 +20,7 @@ public class Note {
 
     @Column(nullable = false)
     private String title;
+
     private String content;
 
     // Gettery a settery
