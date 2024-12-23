@@ -29,7 +29,7 @@
 
     <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h3">Boards</h1>
+            <h1 class="h3">Your Boards</h1>
             <a href="/boards/new" class="btn btn-success">Add New Board</a>
         </div>
 
@@ -47,6 +47,30 @@
                     </div>
                 </div>
             </div>
+
+
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3">Shared Boards</h1>
+        </div>
+
+        <div class="row">
+            <div th:if="${sharedBoards.size() == 0}" class="col-12 text-center">
+                <p class="text-muted">No boards available. Create your first board now!</p>
+            </div>
+
+            <div th:each="board : ${sharedBoards}" class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${board.name}">Board Name</h5>
+                        <p class="card-text text-muted" th:text="${board.description}">Board Description</p>
+                        <a th:href="@{/boards/{id}(id=${board.id})}" class="btn btn-outline-primary btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </body>

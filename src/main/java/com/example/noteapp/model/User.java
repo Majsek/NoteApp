@@ -1,9 +1,12 @@
 package com.example.noteapp.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,6 +18,9 @@ public class User {
     private String username;
     private String password;
     private String role;
+    
+    @ManyToMany(mappedBy = "collaborators")
+    private Set<Board> sharedBoards;
 
     public Long getId() {
         return id;
@@ -46,5 +52,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<Board> getSharedBoards() {
+        return sharedBoards;
+    }
+    
+    public void setSharedBoards(Set<Board> sharedBoards) {
+        this.sharedBoards = sharedBoards;
     }
 }
