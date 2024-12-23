@@ -22,6 +22,8 @@
         <li th:each="collaborator : ${board.collaborators}" th:text="${collaborator.username}"></li>
     </ul>
 
+    <a th:href="@{/boards/{id}/add-collaborator(id=${board.id})}" class="btn btn-primary mt-4">Add Collaborator</a>
+
 
     <h2 class="mt-4">Notes</h2>
     <table class="table table-striped mt-2">

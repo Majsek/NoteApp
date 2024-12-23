@@ -34,6 +34,7 @@ public class BoardController {
     @GetMapping({ "/boards", "/boards/" })
     public String getBoards(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
         model.addAttribute("boards", boardService.getAllBoardsWithOwnerId(userDetails.getUser().getId()));
+        model.addAttribute("sharedBoards", boardService.getBoardsForCollaborator(userDetails.getUser().getId()));
         return "boards";
     }
 
