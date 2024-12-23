@@ -9,9 +9,13 @@ import com.example.noteapp.model.Board;
 
 @Service
 public interface Interface_BoardService {
+
+    public List<Board> getAllBoardsWithOwnerId(Long ownerId);
+
     public List<Board> getAllBoards();
 
     public Board save(Board board);
 
     public Optional<Board> findById(Long id);
+
 }

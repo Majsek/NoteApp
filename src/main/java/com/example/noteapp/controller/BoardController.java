@@ -29,8 +29,8 @@ public class BoardController {
     }
 
     @GetMapping({"/boards", "/boards/"})
-    public String getBoards(Model model) {
-        model.addAttribute("boards", boardService.getAllBoards());
+    public String getBoards(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
+        model.addAttribute("boards", boardService.getAllBoardsWithOwnerId(userDetails.getUser().getId()));
         return "boards";
     }
 

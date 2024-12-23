@@ -21,6 +21,11 @@ public class BoardService implements Interface_BoardService {
     }
 
     @Override
+    public List<Board> getAllBoardsWithOwnerId(Long ownerId) {
+        return boardRepository.findByOwnerId(ownerId);
+    }
+
+    @Override
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
