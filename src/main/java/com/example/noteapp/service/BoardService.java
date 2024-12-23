@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.noteapp.model.Board;
+import com.example.noteapp.model.User;
 import com.example.noteapp.repository.Interface_BoardRepository;
 import com.example.noteapp.service.interfaces.Interface_BoardService;
 
@@ -41,6 +42,19 @@ public class BoardService implements Interface_BoardService {
     @Override
     public Optional<Board> findById(Long id) {
         return boardRepository.findById(id);
+    }
+
+    @Override
+    public List<Board> getBoardsForCollaborator(Long userId) {
+        return boardRepository.findBoardsByCollaboratorId(userId);
+    }
+
+    public void addCollaboratorToBoard(Long boardId, User user) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found"));
+
+        board.getCollaborators().add(user);
+        boardRepository.save(board);
     }
 
 }

@@ -1,10 +1,15 @@
 package com.example.noteapp.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +29,10 @@ public class Board {
     @Column(nullable = false)
     private Long ownerId;
 
+    @ManyToMany
+    @JoinTable(name = "board_collaborators", joinColumns = @JoinColumn(name = "board_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> collaborators;
+
     // Constructors
 
     public Board() {
@@ -36,6 +45,14 @@ public class Board {
     }
 
     // Getters and Setters
+
+    public Set<User> getCollaborators() {
+        return collaborators;
+    }
+    
+    public void setCollaborators(Set<User> collaborators) {
+        this.collaborators = collaborators;
+    }
 
     public Long getOwnerId() {
         return ownerId;

@@ -18,4 +18,6 @@ public interface Interface_BoardService {
 
     public Optional<Board> findById(Long id);
 
+    public List<Board> getBoardsForCollaborator(Long userId);
+
 }
