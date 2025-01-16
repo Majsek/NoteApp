@@ -33,7 +33,7 @@ public class BoardService implements Interface_BoardService {
 
     @Override
     public Board save(Board board) {
-        if (boardRepository.existsByName(board.getName())) {
+        if (board.getId() == null && boardRepository.existsByName(board.getName())) {
             throw new IllegalArgumentException("Board with this name already exists.");
         }
         return boardRepository.save(board);
@@ -57,4 +57,20 @@ public class BoardService implements Interface_BoardService {
         boardRepository.save(board);
     }
 
+    public void removeCollaborator(Long boardId, User user) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+    
+        if (!board.getCollaborators().contains(user)) {
+            throw new IllegalArgumentException("User is not a collaborator on this board.");
+        }
+    
+        board.getCollaborators().remove(user);
+        boardRepository.save(board);
+    }
+
+    public Board update(Board board) {
+        return boardRepository.save(board);
+    }
+    
 }

@@ -19,7 +19,16 @@
 
     <h2 class="mt-4">Collaborators</h2>
     <ul>
-        <li th:each="collaborator : ${board.collaborators}" th:text="${collaborator.username}"></li>
+        <li th:each="collaborator : ${board.collaborators}">
+            <span th:text="${collaborator.username}"></span>
+            <form th:if="${collaborator.id != board.ownerId}" 
+                  th:action="@{/boards/{boardId}/remove-collaborator(boardId=${board.id})}" 
+                  method="post" 
+                  style="display:inline;">
+                  <input type="hidden" name="username" th:value="${collaborator.username}" />
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+        </li>
     </ul>
 
     <a th:href="@{/boards/{id}/add-collaborator(id=${board.id})}" class="btn btn-primary mt-4">Add Collaborator</a>

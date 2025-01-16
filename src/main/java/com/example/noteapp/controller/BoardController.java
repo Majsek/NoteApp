@@ -88,4 +88,22 @@ public class BoardController {
         return "redirect:/boards/" + id;
     }
 
+    @PostMapping("/boards/{boardId}/remove-collaborator")
+    public String removeCollaborator(@PathVariable Long boardId, @RequestParam String username) {
+        Board board = boardService.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+    
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with username: " + username);
+        }
+    
+        board.getCollaborators().remove(user);
+    
+        boardService.update(board);
+    
+        return "redirect:/boards/" + boardId;
+    }
+    
 }
+    
