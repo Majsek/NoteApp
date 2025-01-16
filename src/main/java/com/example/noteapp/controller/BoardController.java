@@ -1,6 +1,7 @@
 package com.example.noteapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,14 +59,9 @@ public class BoardController {
         }
     }
 
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
     @GetMapping("/boards/{boardId}")
-    public String getBoardDetails(@PathVariable Long boardId, Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-
-        Long userId = userDetails.getUser().getId();
-
-        if (!boardService.hasAccess(boardId, userId)) {
-            throw new IllegalArgumentException("You do not have access to this board.");
-        }
+    public String getBoardDetails(@PathVariable Long boardId, Model model) {
 
         Board board = boardService.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
