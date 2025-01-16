@@ -43,7 +43,16 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${board.name}">Board Name</h5>
                         <p class="card-text text-muted" th:text="${board.description}">Board Description</p>
-                        <a th:href="@{/boards/{id}(id=${board.id})}" class="btn btn-outline-primary btn-sm">View Details</a>
+                        <a th:href="@{/boards/{id}(id=${board.id})}" class="btn btn-outline-primary btn-sm">View
+                            Details</a>
+
+                        <form
+                            th:action="@{/boards/{boardId}/remove-board(boardId=${board.id})}" method="post"
+                            style="display:inline;">
+                            <input type="hidden" name="boardId" th:value="${board.id}" />
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+
                     </div>
                 </div>
             </div>
@@ -65,7 +74,8 @@
                     <div class="card-body">
                         <h5 class="card-title" th:text="${board.name}">Board Name</h5>
                         <p class="card-text text-muted" th:text="${board.description}">Board Description</p>
-                        <a th:href="@{/boards/{id}(id=${board.id})}" class="btn btn-outline-primary btn-sm">View Details</a>
+                        <a th:href="@{/boards/{id}(id=${board.id})}" class="btn btn-outline-primary btn-sm">View
+                            Details</a>
                     </div>
                 </div>
             </div>

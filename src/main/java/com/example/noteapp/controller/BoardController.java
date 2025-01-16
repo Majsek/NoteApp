@@ -72,6 +72,21 @@ public class BoardController {
     }
 
     @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
+    @PostMapping("/boards/{boardId}/remove-board")
+    public String removeBoard(@PathVariable Long boardId) {
+        Board board = boardService.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+      
+        boardService.remove(board);
+    
+        return "redirect:/boards/";
+    }
+
+    // =============
+    // COLLABORATOR
+    // =============
+
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
     @GetMapping("/boards/{boardId}/add-collaborator")
     public String showAddCollaboratorForm(@PathVariable Long boardId, Model model) {
         model.addAttribute("boardId", boardId);
@@ -86,10 +101,26 @@ public class BoardController {
             @RequestParam String username,
             Model model) {
         User user = userService.findByUsername(username);
+
         if (user == null) {
             model.addAttribute("error", "User not found");
             return "add-collaborator";
         }
+
+
+        Board board = boardService.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+
+        if (board.getOwnerId().equals(user.getId())) {
+            model.addAttribute("error", "Cannot add the owner as a collaborator.");
+            return "add-collaborator";
+        }
+
+        if (board.getCollaborators().stream().anyMatch(collaborator -> collaborator.getId().equals(user.getId()))) {
+            model.addAttribute("error", "User is already a collaborator.");
+            return "add-collaborator";
+        }
+
         boardService.addCollaboratorToBoard(boardId, user);
         return "redirect:/boards/" + boardId;
     }
