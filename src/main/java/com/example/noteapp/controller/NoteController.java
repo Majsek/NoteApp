@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.noteapp.model.Note;
 import com.example.noteapp.service.BoardService;
@@ -54,4 +55,17 @@ public class NoteController {
         return "redirect:/boards/" + boardId;
     }
 
+    @PostMapping("/boards/{boardId}/notes/remove")
+    public String removeNote(@PathVariable Long boardId,
+            @RequestParam Long noteId) {
+        Note note = noteService.getNoteById(noteId);
+
+        if (note == null || !note.getBoardId().equals(boardId)) {
+            throw new IllegalArgumentException("Invalid note or note does not belong to the specified board.");
+        }
+
+        noteService.delete(noteId);
+
+        return "redirect:/boards/" + boardId;
+    }
 }

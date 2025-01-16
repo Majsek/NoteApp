@@ -21,11 +21,10 @@
     <ul>
         <li th:each="collaborator : ${board.collaborators}">
             <span th:text="${collaborator.username}"></span>
-            <form th:if="${collaborator.id != board.ownerId}" 
-                  th:action="@{/boards/{boardId}/remove-collaborator(boardId=${board.id})}" 
-                  method="post" 
-                  style="display:inline;">
-                  <input type="hidden" name="username" th:value="${collaborator.username}" />
+            <form th:if="${collaborator.id != board.ownerId}"
+                th:action="@{/boards/{boardId}/remove-collaborator(boardId=${board.id})}" method="post"
+                style="display:inline;">
+                <input type="hidden" name="username" th:value="${collaborator.username}" />
                 <button type="submit" class="btn btn-danger btn-sm">Remove</button>
             </form>
         </li>
@@ -48,7 +47,14 @@
                 <td th:text="${note.id}"></td>
                 <td th:text="${note.title}"></td>
                 <td th:text="${note.content}"></td>
+                <td>
+                <form th:action="@{/boards/{boardId}/notes/remove(boardId=${board.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="noteId" th:value="${note.id}" />
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </td>
             </tr>
+            
         </tbody>
     </table>
 

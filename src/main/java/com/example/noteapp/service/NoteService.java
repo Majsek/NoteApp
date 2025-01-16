@@ -60,4 +60,11 @@ public class NoteService implements Interface_NoteService {
     public Object findByBoardId(Long id) {
         return noteRepository.findByBoardId(id);
     }
+
+    public void delete(Long noteId) {
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new IllegalArgumentException("Note not found with ID: " + noteId));
+        noteRepository.delete(note);
+    }
+    
 }
