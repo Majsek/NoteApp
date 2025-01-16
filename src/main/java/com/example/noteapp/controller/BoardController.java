@@ -59,7 +59,14 @@ public class BoardController {
     }
 
     @GetMapping("/boards/{boardId}")
-    public String getBoardDetails(@PathVariable Long boardId, Model model) {
+    public String getBoardDetails(@PathVariable Long boardId, Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
+
+        Long userId = userDetails.getUser().getId();
+
+        if (!boardService.hasAccess(boardId, userId)) {
+            throw new IllegalArgumentException("You do not have access to this board.");
+        }
+
         Board board = boardService.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
         model.addAttribute("board", board);
