@@ -73,4 +73,11 @@ public class BoardService implements Interface_BoardService {
         return boardRepository.save(board);
     }
     
+    public boolean hasAccess(Long boardId, Long userId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
+    
+        return board.getOwnerId().equals(userId) || 
+               board.getCollaborators().stream().anyMatch(collaborator -> collaborator.getId().equals(userId));
+    }    
 }

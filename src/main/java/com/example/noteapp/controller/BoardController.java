@@ -1,6 +1,7 @@
 package com.example.noteapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +46,7 @@ public class BoardController {
         return "new-board-form";
     }
 
+
     @PostMapping("/boards/new")
     public String addNewBoard(@ModelAttribute Board board, Model model,
             @AuthenticationPrincipal MyUserDetails userDetails) {
@@ -58,8 +60,10 @@ public class BoardController {
         }
     }
 
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
     @GetMapping("/boards/{boardId}")
     public String getBoardDetails(@PathVariable Long boardId, Model model) {
+
         Board board = boardService.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
         model.addAttribute("board", board);
@@ -67,16 +71,18 @@ public class BoardController {
         return "board-details";
     }
 
-    @GetMapping("/boards/{id}/add-collaborator")
-    public String showAddCollaboratorForm(@PathVariable Long id, Model model) {
-        model.addAttribute("boardId", id);
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
+    @GetMapping("/boards/{boardId}/add-collaborator")
+    public String showAddCollaboratorForm(@PathVariable Long boardId, Model model) {
+        model.addAttribute("boardId", boardId);
         model.addAttribute("username", "");
         return "add-collaborator";
     }
 
-    @PostMapping("/boards/{id}/add-collaborator")
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
+    @PostMapping("/boards/{boardId}/add-collaborator")
     public String addCollaborator(
-            @PathVariable Long id,
+            @PathVariable Long boardId,
             @RequestParam String username,
             Model model) {
         User user = userService.findByUsername(username);
@@ -84,10 +90,11 @@ public class BoardController {
             model.addAttribute("error", "User not found");
             return "add-collaborator";
         }
-        boardService.addCollaboratorToBoard(id, user);
-        return "redirect:/boards/" + id;
+        boardService.addCollaboratorToBoard(boardId, user);
+        return "redirect:/boards/" + boardId;
     }
 
+    @PreAuthorize("@boardSecurity.hasAccess(#boardId, principal.user.id)")
     @PostMapping("/boards/{boardId}/remove-collaborator")
     public String removeCollaborator(@PathVariable Long boardId, @RequestParam String username) {
         Board board = boardService.findById(boardId)
