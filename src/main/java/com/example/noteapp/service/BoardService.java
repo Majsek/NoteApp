@@ -53,6 +53,14 @@ public class BoardService implements Interface_BoardService {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found"));
 
+        if (board.getOwnerId().equals(user.getId())) {
+            throw new IllegalArgumentException("Cannot add the owner as a collaborator.");
+        }
+
+        if (board.getCollaborators().stream().anyMatch(collaborator -> collaborator.getId().equals(user.getId()))) {
+            throw new IllegalArgumentException("User is already a collaborator.");
+        }
+
         board.getCollaborators().add(user);
         boardRepository.save(board);
     }
@@ -60,11 +68,11 @@ public class BoardService implements Interface_BoardService {
     public void removeCollaborator(Long boardId, User user) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
-    
+
         if (!board.getCollaborators().contains(user)) {
             throw new IllegalArgumentException("User is not a collaborator on this board.");
         }
-    
+
         board.getCollaborators().remove(user);
         boardRepository.save(board);
     }
@@ -72,12 +80,12 @@ public class BoardService implements Interface_BoardService {
     public Board update(Board board) {
         return boardRepository.save(board);
     }
-    
+
     public boolean hasAccess(Long boardId, Long userId) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId));
-    
-        return board.getOwnerId().equals(userId) || 
-               board.getCollaborators().stream().anyMatch(collaborator -> collaborator.getId().equals(userId));
-    }    
+
+        return board.getOwnerId().equals(userId) ||
+                board.getCollaborators().stream().anyMatch(collaborator -> collaborator.getId().equals(userId));
+    }
 }
