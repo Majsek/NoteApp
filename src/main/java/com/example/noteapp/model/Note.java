@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "notes")
@@ -19,10 +20,12 @@ public class Note {
     @Column(nullable = false)
     private Long boardId;
 
+    @Size(max = 255, message = "Title cannot exceed 255 characters.")
     @Column(nullable = false)
     @NotBlank(message = "Title is required")
     private String title;
 
+    @Size(max = 3000, message = "Content must be under 3000 characters.")
     @Column(length = 3000)
     private String content;
 

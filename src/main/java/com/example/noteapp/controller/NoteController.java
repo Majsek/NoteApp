@@ -45,8 +45,8 @@ public class NoteController {
             model.addAttribute("board", boardService.findById(boardId)
                     .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId)));
             model.addAttribute("notes", noteService.findByBoardId(boardId));
-            model.addAttribute("error", "Note title is required.");
-            return "board-details";
+            model.addAttribute("boardId", boardId);
+            return "note-form";
         }
 
         note.setBoardId(boardId);
