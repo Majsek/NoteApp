@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "notes")
@@ -19,8 +20,10 @@ public class Note {
     private Long boardId;
 
     @Column(nullable = false)
+    @NotBlank(message = "Title is required")
     private String title;
 
+    @Column(length = 3000)
     private String content;
 
     // Gettery a settery
