@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "boards")
@@ -20,10 +21,12 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = 255, message = "Title cannot exceed 255 characters.")
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(length = 500)
+    @Size(max = 3000, message = "Description cannot exceed 3000 characters.")
+    @Column(length = 3000)
     private String description;
 
     @Column(nullable = false)
