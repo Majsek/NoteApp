@@ -54,8 +54,17 @@ public class NoteService implements Interface_NoteService {
     @Override
     public Note save(Note note) {
         System.out.println("Saving note: " + note);
-        return noteRepository.save(note);
+        try {
+            Note savedNote = noteRepository.save(note);
+            System.out.println("Note saved: " + savedNote);
+            return savedNote;
+        } catch (Exception e) {
+            System.out.println("Error saving note: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
+    
 
     public Object findByBoardId(Long id) {
         return noteRepository.findByBoardId(id);
