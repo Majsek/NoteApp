@@ -48,10 +48,12 @@ public class NoteController {
     }
 
     @PostMapping("/boards/{boardId}/notes/save")
-    public String saveNote(@PathVariable Long boardId, 
-                           @Valid @ModelAttribute Note note, 
-                           BindingResult bindingResult, 
-                           Model model) {
+    public String saveNote(@PathVariable Long boardId,
+            @Valid @ModelAttribute Note note,
+            BindingResult bindingResult,
+            @RequestParam(required = false) String tags,
+            Model model) {
+        System.out.println("Note ID: " + note.getId());
         if (bindingResult.hasErrors()) {
             model.addAttribute("board", boardService.findById(boardId)
                     .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId)));
@@ -59,7 +61,7 @@ public class NoteController {
             model.addAttribute("boardId", boardId);
             return "note-form";
         }
-    
+
         // Převod tagsInput na Set<Tag>
         String[] tagNames = note.getTagsInput().split(",");
         Set<Tag> tagSet = new HashSet<>();
@@ -71,12 +73,19 @@ public class NoteController {
         }
     
         note.setTags(tagSet);
+
         note.setBoardId(boardId);
-        noteService.save(note);
-    
+
+        if (note.getId() == null) {
+            System.out.println("Creating new note.");
+            noteService.save(note);
+        } else {
+            System.out.println("Updating existing note with ID: " + note.getId());
+            noteService.updateNote(note);
+        }
+
         return "redirect:/boards/" + boardId;
     }
-    
 
     @PostMapping("/boards/{boardId}/notes/remove")
     public String removeNote(@PathVariable Long boardId,
@@ -90,5 +99,19 @@ public class NoteController {
         noteService.delete(noteId);
 
         return "redirect:/boards/" + boardId;
+    }
+
+    @GetMapping("/boards/{boardId}/notes/edit")
+    public String editNoteForm(@PathVariable Long boardId,
+            @RequestParam Long noteId,
+            Model model) {
+        Note note = noteService.getNoteById(noteId);
+        if (note == null || !note.getBoardId().equals(boardId)) {
+            throw new IllegalArgumentException("Note not found or does not belong to this board.");
+        }
+
+        model.addAttribute("boardId", boardId);
+        model.addAttribute("note", note);
+        return "note-form";
     }
 }

@@ -8,6 +8,7 @@
     <div class="container">
         <h1>Create a new Note for Board <span th:text="${boardId}"></span></h1>
         <form th:action="@{/boards/{boardId}/notes/save(boardId=${boardId})}" th:object="${note}" method="post">
+            <input type="hidden" th:field="*{id}" />
             <div th:if="${error}" class="alert alert-danger">
                 <p th:text="${error}"></p>
             </div>

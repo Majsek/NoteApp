@@ -32,13 +32,20 @@ public class NoteService implements Interface_NoteService {
 
     @Override
     public boolean updateNote(Note note) {
-        Optional<Note> noteDB = noteRepository.findById(note.getId());
-        if (noteDB.isPresent()) {
-            noteRepository.save(note);
-            return true;
+        if (note.getId() == null) {
+            throw new IllegalArgumentException("Note ID must not be null for update.");
         }
-        return false;
+    
+        Note existingNote = noteRepository.findById(note.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Note not found."));
+        existingNote.setTitle(note.getTitle());
+        existingNote.setContent(note.getContent());
+        existingNote.setTags(note.getTags());
+        noteRepository.save(existingNote);
+    
+        return true;
     }
+    
 
     @Override
     public Note deleteNoteById(Long id) {
@@ -64,7 +71,6 @@ public class NoteService implements Interface_NoteService {
             throw e;
         }
     }
-    
 
     public Object findByBoardId(Long id) {
         return noteRepository.findByBoardId(id);
@@ -75,5 +81,5 @@ public class NoteService implements Interface_NoteService {
                 .orElseThrow(() -> new IllegalArgumentException("Note not found with ID: " + noteId));
         noteRepository.delete(note);
     }
-    
+
 }
