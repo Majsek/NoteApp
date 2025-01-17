@@ -1,5 +1,8 @@
 package com.example.noteapp.controller;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.noteapp.model.Note;
+import com.example.noteapp.model.Tag;
 import com.example.noteapp.service.BoardService;
 import com.example.noteapp.service.NoteService;
+import com.example.noteapp.service.TagService;
 
 import jakarta.validation.Valid;
 
@@ -20,10 +25,13 @@ public class NoteController {
 
     private final NoteService noteService;
     private final BoardService boardService;
+    private final TagService tagService;
 
-    public NoteController(NoteService noteService, BoardService boardService) {
+    public NoteController(NoteService noteService, BoardService boardService, TagService tagService) {
         this.boardService = boardService;
         this.noteService = noteService;
+        this.tagService = tagService;
+
     }
 
     @GetMapping("/notes")
@@ -40,8 +48,12 @@ public class NoteController {
     }
 
     @PostMapping("/boards/{boardId}/notes/save")
-    public String saveNote(@PathVariable Long boardId, @Valid @ModelAttribute Note note,
-            BindingResult bindingResult, Model model) {
+    public String saveNote(@PathVariable Long boardId,
+            @Valid @ModelAttribute Note note,
+            BindingResult bindingResult,
+            @RequestParam(required = false) String tags,
+            Model model) {
+        System.out.println("Note ID: " + note.getId());
         if (bindingResult.hasErrors()) {
             model.addAttribute("board", boardService.findById(boardId)
                     .orElseThrow(() -> new IllegalArgumentException("Board not found with ID: " + boardId)));
@@ -50,8 +62,28 @@ public class NoteController {
             return "note-form";
         }
 
+        // Převod tagsInput na Set<Tag>
+        String[] tagNames = note.getTagsInput().split(",");
+        Set<Tag> tagSet = new HashSet<>();
+        for (String tagName : tagNames) {
+            String trimmedTagName = tagName.trim();
+            if (!trimmedTagName.isEmpty()) {
+                tagSet.add(tagService.findOrCreateTag(trimmedTagName));
+            }
+        }
+    
+        note.setTags(tagSet);
+
         note.setBoardId(boardId);
-        noteService.save(note);
+
+        if (note.getId() == null) {
+            System.out.println("Creating new note.");
+            noteService.save(note);
+        } else {
+            System.out.println("Updating existing note with ID: " + note.getId());
+            noteService.updateNote(note);
+        }
+
         return "redirect:/boards/" + boardId;
     }
 
@@ -67,5 +99,19 @@ public class NoteController {
         noteService.delete(noteId);
 
         return "redirect:/boards/" + boardId;
+    }
+
+    @GetMapping("/boards/{boardId}/notes/edit")
+    public String editNoteForm(@PathVariable Long boardId,
+            @RequestParam Long noteId,
+            Model model) {
+        Note note = noteService.getNoteById(noteId);
+        if (note == null || !note.getBoardId().equals(boardId)) {
+            throw new IllegalArgumentException("Note not found or does not belong to this board.");
+        }
+
+        model.addAttribute("boardId", boardId);
+        model.addAttribute("note", note);
+        return "note-form";
     }
 }

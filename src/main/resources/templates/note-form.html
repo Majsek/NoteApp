@@ -8,6 +8,11 @@
     <div class="container">
         <h1>Create a new Note for Board <span th:text="${boardId}"></span></h1>
         <form th:action="@{/boards/{boardId}/notes/save(boardId=${boardId})}" th:object="${note}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <div th:if="${error}" class="alert alert-danger">
+                <p th:text="${error}"></p>
+            </div>
+            
             <div th:if="${#fields.hasErrors('title')}" class="alert alert-danger">
                 <p th:errors="*{title}"></p>
             </div>
@@ -23,11 +28,15 @@
                 <label for="content" class="form-label">Content</label>
                 <textarea id="content" class="form-control" th:field="*{content}"></textarea>
             </div>
+
+            <div class="mb-3">
+                <label for="tags" class="form-label">Tags (comma-separated)</label>
+                <input type="text" id="tags" class="form-control" th:field="*{tagsInput}" />
+            </div>
+            
         
             <button type="submit" class="btn btn-primary">Save Note</button>
         </form>
-        
-        <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
     </div>
 </body>
 </html>

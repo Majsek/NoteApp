@@ -44,6 +44,7 @@
                 <th>Note ID</th>
                 <th>Title</th>
                 <th>Content</th>
+                <th>Tags</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -53,6 +54,12 @@
                 <td th:text="${note.title}"></td>
                 <td th:text="${note.content}"></td>
                 <td>
+                    <span th:each="tag : ${note.tags}" th:text="${tag.name}" class="badge bg-primary"></span>
+                </td>
+                <td>
+                    <a th:href="@{/boards/{boardId}/notes/edit(boardId=${board.id}, noteId=${note.id})}" 
+                    class="btn btn-warning btn-sm">Edit</a>
+
                     <form th:action="@{/boards/{boardId}/notes/remove(boardId=${board.id})}" 
                           method="post" style="display:inline;">
                         <input type="hidden" name="noteId" th:value="${note.id}" />
